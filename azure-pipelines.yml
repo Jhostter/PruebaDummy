@@ -51,16 +51,18 @@ stages:
           sonar.branch.name=
 
     - bash: |
-        echo "Buscando el ejecutable del escáner..."
-        # Buscamos el binario dentro de las carpetas de trabajo del agente
-        SCANNER_PATH=$(find $(Agent.WorkFolder)/_tasks -name sonar-scanner | head -n 1)
+        echo "Buscando el BINARIO del escáner..."
+        # Buscamos el archivo ejecutable dentro de la carpeta bin
+        SCANNER_PATH=$(find $(Agent.WorkFolder)/_tasks -path "*/bin/sonar-scanner" -type f | head -n 1)
         
         if [ -z "$SCANNER_PATH" ]; then
-          echo "[error]No se encontró el sonar-scanner. Revisa la instalación de la extensión."
+          echo "[error]No se encontró el ejecutable. Revisa si la tarea SonarQubePrepare se ejecutó bien."
           exit 1
         fi
         
-        echo "Escáner encontrado en: $SCANNER_PATH"
+        echo "Binario encontrado en: $SCANNER_PATH"
+        
+        chmod +x $SCANNER_PATH
         
         $SCANNER_PATH \
           -Dsonar.projectKey=dummy_devops \
@@ -72,6 +74,7 @@ stages:
       displayName: 'Bypass de Análisis SonarQube'
       env:
         TOKEN_DE_SONAR: $(SONAR_TOKEN)
+
     - task: SonarQubePublish@8
       inputs:
         pollingTimeoutSec: '300'
