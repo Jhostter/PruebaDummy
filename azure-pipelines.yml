@@ -37,9 +37,6 @@ stages:
       displayName: 'Punto B: Script archivos con fecha'
 
   - job: SonarAnalysis
-    variables:
-      Build.SourceBranch: ""
-      Build.SourceBranchName: ""
     steps:
     - task: SonarQubePrepare@8
       inputs:
@@ -52,6 +49,9 @@ stages:
           sonar.branch.name=
           sonar.scm.provider=git
     - task: SonarQubeAnalyze@8
+      env:
+        BUILD_SOURCEBRANCH: ""
+        BUILD_SOURCEBRANCHNAME: ""
     - task: SonarQubePublish@8
       inputs:
         pollingTimeoutSec: '300'
