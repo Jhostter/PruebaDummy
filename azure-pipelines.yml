@@ -47,7 +47,7 @@ stages:
         cliSources: 'backend'
         extraProperties: |
           sonar.branch.name=
-          sonar.scm.provider=git
+          sonar.scm.provider=none
     - task: SonarQubeAnalyze@8
       env:
         BUILD_SOURCEBRANCH: ""
