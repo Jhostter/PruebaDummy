@@ -69,7 +69,7 @@ stages:
           -Dsonar.sources=backend \
           -Dsonar.host.url=http://192.168.107.20:9000 \
           -Dsonar.login=$TOKEN_DE_SONAR \
-          -Dsonar.scm.provider=none \
+          -Dsonar.scm.disabled=true \
           -Dsonar.branch.name=
       displayName: 'Bypass de Análisis SonarQube'
       env:
