@@ -38,18 +38,40 @@ stages:
 
   - job: SonarAnalysis
     steps:
+    - task: SonarQubePrepare@8
+      name: SonarPrepare
+      inputs:
+        SonarQube: 'sonarqube-local'
+        scannerMode: 'CLI'
+        configMode: 'manual'
+        cliProjectKey: 'dummy_devops'
+        cliSources: 'backend'
+        extraProperties: |
+          sonar.scm.provider=none
+          sonar.branch.name=
+
     - bash: |
-        echo "Ejecutando escáner manual para evitar error de ramas en v8..."
-        # Usamos el ejecutable que la tarea Prepare ya dejó listo
-        $(SonarQubePrepare.sonarScannerPath) \
+        echo "Buscando el ejecutable del escáner..."
+        # Buscamos el binario dentro de las carpetas de trabajo del agente
+        SCANNER_PATH=$(find $(Agent.WorkFolder)/_tasks -name sonar-scanner | head -n 1)
+        
+        if [ -z "$SCANNER_PATH" ]; then
+          echo "[error]No se encontró el sonar-scanner. Revisa la instalación de la extensión."
+          exit 1
+        fi
+        
+        echo "Escáner encontrado en: $SCANNER_PATH"
+        
+        $SCANNER_PATH \
           -Dsonar.projectKey=dummy_devops \
           -Dsonar.sources=backend \
           -Dsonar.host.url=http://192.168.107.20:9000 \
           -Dsonar.login=$TOKEN_DE_SONAR \
-          -Dsonar.scm.provider=none
+          -Dsonar.scm.provider=none \
+          -Dsonar.branch.name=
       displayName: 'Bypass de Análisis SonarQube'
       env:
-        TOKEN_DE_SONAR: $(SONAR_TOKEN) 
+        TOKEN_DE_SONAR: $(SONAR_TOKEN)
     - task: SonarQubePublish@8
       inputs:
         pollingTimeoutSec: '300'
