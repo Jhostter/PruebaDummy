@@ -45,6 +45,8 @@ stages:
         configMode: 'manual'
         cliProjectKey: 'dummy_devops'
         cliSources: 'backend'
+        extraProperties: |
+          sonar.branch.name=
     - task: SonarQubeAnalyze@8
     - task: SonarQubePublish@8
       inputs:
