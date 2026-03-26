@@ -76,9 +76,11 @@ stages:
         TOKEN_DE_SONAR: $(SONAR_TOKEN)
 
     - task: SonarQubePublish@8
+      displayName: 'Verificar Calidad de SonarQube'
       inputs:
+        checkLogForIssues: true
         pollingTimeoutSec: '300'
-        
+
 - stage: Build_and_Push
   dependsOn: Quality_and_Scripts
   condition: succeeded()
