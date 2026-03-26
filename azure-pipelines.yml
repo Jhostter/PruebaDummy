@@ -6,7 +6,7 @@ pool:
 
 variables:
   dockerRegistryServiceConnection: 'dockerhub-conn'
-  imageRepository: 'jhostterv/app-backend'
+  imageRepository: 'jhostterv/pruebadummy'
   containerRegistry: 'docker.io'
   dockerfilePath: '$(Build.SourcesDirectory)/backend/Dockerfile'
   tag: '$(Build.BuildId)'
@@ -38,15 +38,15 @@ stages:
 
   - job: SonarAnalysis
     steps:
-    - task: SonarQubePrepare@5
+    - task: SonarQubePrepare@8
       inputs:
         SonarQube: 'sonarqube-local'
         scannerMode: 'CLI'
         configMode: 'manual'
         cliProjectKey: 'proyecto-backend'
         cliSources: 'backend'
-    - task: SonarQubeAnalyze@5
-    - task: SonarQubePublish@5
+    - task: SonarQubeAnalyze@8
+    - task: SonarQubePublish@8
       inputs:
         pollingTimeoutSec: '300'
 
