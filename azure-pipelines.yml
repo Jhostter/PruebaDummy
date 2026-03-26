@@ -81,6 +81,19 @@ stages:
         checkLogForIssues: true
         pollingTimeoutSec: '300'
 
+    - bash: |
+        STATUS=$(curl -s -u $(SONAR_TOKEN): "http://192.168.107.20:9000/api/qualitygates/project_status?projectKey=dummy_devops" | jq -r '.projectStatus.status')
+        
+        echo "El estado actual es: $STATUS"
+        
+        if [ "$STATUS" == "ERROR" ] || [ "$STATUS" == "FAILED" ]; then
+          echo "[error]El Quality Gate ha fallado en SonarQube. Deteniendo pipeline."
+          exit 1
+        fi
+      displayName: 'Verificación Forzada de Quality Gate'
+      env:
+        SONAR_TOKEN: $(SONAR_TOKEN)
+        
 - stage: Build_and_Push
   dependsOn: Quality_and_Scripts
   condition: succeeded()
