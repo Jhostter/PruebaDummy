@@ -38,24 +38,22 @@ stages:
 
   - job: SonarAnalysis
     steps:
-    - task: SonarQubePrepare@8
-      inputs:
-        SonarQube: 'sonarqube-local'
-        scannerMode: 'CLI'
-        configMode: 'manual'
-        cliProjectKey: 'dummy_devops'
-        cliSources: 'backend'
-        extraProperties: |
-          sonar.branch.name=
-          sonar.scm.provider=none
-    - task: SonarQubeAnalyze@8
+    - bash: |
+        echo "Ejecutando escáner manual para evitar error de ramas en v8..."
+        # Usamos el ejecutable que la tarea Prepare ya dejó listo
+        $(SonarQubePrepare.sonarScannerPath) \
+          -Dsonar.projectKey=dummy_devops \
+          -Dsonar.sources=backend \
+          -Dsonar.host.url=http://192.168.107.20:9000 \
+          -Dsonar.login=$TOKEN_DE_SONAR \
+          -Dsonar.scm.provider=none
+      displayName: 'Bypass de Análisis SonarQube'
       env:
-        BUILD_SOURCEBRANCH: ""
-        BUILD_SOURCEBRANCHNAME: ""
+        TOKEN_DE_SONAR: $(SONAR_TOKEN) 
     - task: SonarQubePublish@8
       inputs:
         pollingTimeoutSec: '300'
-
+        
 - stage: Build_and_Push
   dependsOn: Quality_and_Scripts
   condition: succeeded()
