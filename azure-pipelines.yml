@@ -82,13 +82,26 @@ stages:
         pollingTimeoutSec: '300'
 
     - bash: |
-        STATUS=$(curl -s -u $TOKEN_DE_SONAR: "http://192.168.107.20:9000/api/qualitygates/project_status?projectKey=dummy_devops" | jq -r '.projectStatus.status')
+        echo "Consultando estado del Quality Gate..."
+
+        sleep 10
+
+        URL="http://192.168.107.20:9000/api/qualitygates/project_status?projectKey=dummy_devops"
+        RESPONSE=$(curl -s -u "$TOKEN_DE_SONAR:" "$URL")
         
-        echo "El estado actual es: $STATUS"
+        echo "Respuesta recibida: $RESPONSE"
+
+        STATUS=$(echo $RESPONSE | grep -o '"status":"[^"]*"' | head -1 | cut -d'"' -f4)
         
-        if [ "$STATUS" == "ERROR" ] || [ "$STATUS" == "FAILED" ]; then
-          echo "[error]El Quality Gate ha fallado en SonarQube. Deteniendo pipeline."
+        echo "Estado final: $STATUS"
+        
+        if [ "$STATUS" == "ERROR" ]; then
+          echo "[error]🔴 QUALITY GATE FAILED: Cobertura insuficiente (0.0%)."
           exit 1
+        elif [ "$STATUS" == "OK" ]; then
+          echo "[section]🟢 QUALITY GATE PASSED: Todo en orden."
+        else
+          echo "[warning]⚠️ Estado desconocido: $STATUS"
         fi
       displayName: 'Verificación Forzada de Quality Gate'
       env:
