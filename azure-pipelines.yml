@@ -43,7 +43,7 @@ stages:
         SonarQube: 'sonarqube-local'
         scannerMode: 'CLI'
         configMode: 'manual'
-        cliProjectKey: 'proyecto-backend'
+        cliProjectKey: 'dummy_devops'
         cliSources: 'backend'
     - task: SonarQubeAnalyze@8
     - task: SonarQubePublish@8
