@@ -30,8 +30,7 @@ Navegue a la carpeta del proyecto y ejecute:
 ```bash
 kubectl apply -f environment/
 
----
-
+```
 ## ☁️ Plus: Despliegue en la Nube (Azure Container Apps)
 
 Como valor agregado, se ha realizado el despliegue de la solución en **Azure**, utilizando el servicio **Azure Container Apps**. Esto demuestra la portabilidad de la imagen Docker creada y la capacidad de gestionar entornos productivos en la nube.
