@@ -1,8 +1,8 @@
-# 🚀 Proyecto PruebaDummy: Despliegue en Kubernetes (VER PDF "Jhostter Valdez - Prueba Dummy")
+# Proyecto PruebaDummy: Despliegue en Kubernetes (VER PDF "Jhostter Valdez - Prueba Dummy")
 
 Este repositorio contiene la configuración necesaria para el despliegue de una aplicación **Fullstack (React, Express, MySQL)** en un clúster de **Kubernetes (Minikube)**, utilizando **Azure Pipelines** para la automatización de CI/CD.
 
-## 🏗️ Arquitectura del Sistema
+## Arquitectura del Sistema
 
 La solución se basa en una arquitectura de microservicios orquestada por Kubernetes, garantizando alta disponibilidad y escalabilidad.
 
@@ -31,7 +31,7 @@ Navegue a la carpeta del proyecto y ejecute:
 kubectl apply -f environment/
 
 ```
-## ☁️ Plus: Despliegue en la Nube (Azure Container Apps)
+## Plus: Despliegue en la Nube (Azure Container Apps)
 
 Como valor agregado, se ha realizado el despliegue de la solución en **Azure**, utilizando el servicio **Azure Container Apps**. Esto demuestra la portabilidad de la imagen Docker creada y la capacidad de gestionar entornos productivos en la nube.
 
